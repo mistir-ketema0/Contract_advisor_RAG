@@ -7,6 +7,6 @@ chromadb
 openai
 Flask_cors
 ragas
-pyautogen
+ag2
 scikit-learn
 dotenv
