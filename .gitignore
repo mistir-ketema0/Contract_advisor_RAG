@@ -161,3 +161,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 data
+runtime/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+.ruff_cache/

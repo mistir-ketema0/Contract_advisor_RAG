@@ -1,0 +1,32 @@
+SYNTHETIC SERVICES AGREEMENT — DEMONSTRATION ONLY
+All names and terms are fictional. This fixture is released under the repository's MIT license.
+
+1. Parties
+This agreement is between Northstar Studio (the Customer) and Harbor Analytics (the Supplier).
+
+2. Effective Date and Term
+The agreement starts on 1 January 2026 and remains effective for twelve months.
+
+3. Services
+The Supplier will provide monthly data quality reports and maintain the Customer's analytics dashboard.
+
+4. Fees and Payment
+The monthly fee is EUR 2,000, excluding VAT. Invoices are payable within 30 days of receipt.
+
+5. Termination
+Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period.
+
+6. Confidentiality
+Each party must protect confidential information for three years after termination. Information already public is excluded from this obligation.
+
+7. Data Protection
+The Supplier may process personal data only on the Customer's documented instructions. The Supplier must notify the Customer of a personal data breach within 24 hours of discovery.
+
+8. Liability
+Aggregate liability is capped at the fees paid during the preceding twelve months. The cap does not apply to fraud or deliberate misconduct.
+
+9. Governing Law
+The agreement is governed by the laws of Italy. Disputes will be submitted to the courts of Venice.
+
+10. Intellectual Property
+The Customer owns the final reports. The Supplier retains ownership of its pre-existing tools and libraries.

@@ -1,124 +1,150 @@
-import os
+"""Reproducible synthetic benchmark. Live mode makes explicit paid provider calls."""
+
+import argparse
+import hashlib
 import json
-import pandas as pd
-from ragas import evaluate
-from ragas.metrics import (
-    answer_relevancy,
-    faithfulness,
-    context_recall,
-    context_precision,
-    answer_similarity,
-    answer_correctness
-)
-from langchain.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain_community.vectorstores.chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema.runnable import RunnableParallel
-from operator import itemgetter
-from datasets import Dataset
+import platform
+import statistics
+import tempfile
+from dataclasses import replace
+from datetime import datetime, timezone
+from pathlib import Path
+from time import perf_counter
 
-# Load environment variables
-from dotenv import load_dotenv
-from backend.utils.langchain_util import MyLangChain
-from backend.utils.pdf_util import MyPDF
-from backend.utils.text_splitter_util import MyTextSplitter
-from backend.utils.vector_store_util import MyVectorStore
+from backend.config import ROOT, Settings
+from backend.service import RAGService
 
-load_dotenv()
-openai_api_key = os.getenv('OPENAI_API_KEY')
-os.environ["OPENAI_API_KEY"] = openai_api_key
-langchain = MyLangChain(api_key=openai_api_key)
 
-def load_qa_pairs(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+def percentile(values, p):
+    values = sorted(values)
+    index = (len(values) - 1) * p
+    lower = int(index)
+    upper = min(lower + 1, len(values) - 1)
+    return round(values[lower] + (values[upper] - values[lower]) * (index - lower), 3)
 
-def process_pdf(file_path):
-    pdf_processor = MyPDF(file_path)
-    return pdf_processor.get_pdf_text()
 
-def split_text(raw_text):
-    text_splitter = MyTextSplitter(raw_text)
-    return text_splitter.get_cosine_similarity_chunks()
+def run(settings, benchmark, strategy="hybrid", generate=False):
+    rows = []
+    with tempfile.TemporaryDirectory(prefix="contract-rag-eval-") as directory:
+        service = RAGService(replace(settings, db_path=Path(directory) / "evaluation.sqlite3"))
+        sample = ROOT / "examples/sample-contract.txt"
+        primary = service.ingest(sample.name, sample.read_bytes()).document.id
+        # A distractor with conflicting terms tests whether selection remains scoped.
+        distractor = ROOT / "examples/distractor-contract.txt"
+        service.ingest(distractor.name, distractor.read_bytes())
+        for item in benchmark:
+            start = perf_counter()
+            hits = service.retriever.search(item["question"], [primary], strategy=strategy)
+            latency = (perf_counter() - start) * 1000
+            expected = item["expected_sections"]
+            found = [hit.chunk.section for hit in hits]
+            ranks = [i + 1 for i, section in enumerate(found) if section in expected]
+            covered = len(set(expected) & set(found))
+            row = {
+                "id": item["id"],
+                "question": item["question"],
+                "answerable": item["answerable"],
+                "expected_sections": expected,
+                "retrieved_sections": found,
+                "retrieval_ms": round(latency, 3),
+                "hit_at_k": bool(ranks) if expected else None,
+                "reciprocal_rank": 1 / min(ranks) if ranks else (0 if expected else None),
+                "section_recall_at_k": covered / len(expected) if expected else None,
+            }
+            if generate:
+                # Reuse precisely the evaluated retrieval strategy/candidates, avoiding a
+                # second retrieval with a different configuration.
+                from backend.models import AnswerDraft
+                from backend.service import validate_answer
 
-def create_vector_store(question, text_chunks):
-    vector_store = MyVectorStore()
-    hypothetical_answer = langchain.generate_hypothetical_answer(question)
-    combined_text = f"{question}\n{hypothetical_answer}"
-    return vector_store.embed_text_and_return_vectorstore(text_chunks + [combined_text])
+                draft, usage = (
+                    service.generator.generate(item["question"], hits)
+                    if hits
+                    else (AnswerDraft(insufficient_evidence=True, statements=[]), {})
+                )
+                answer, citations, insufficient = validate_answer(draft, hits)
+                row.update(
+                    answer=answer,
+                    insufficient_evidence=insufficient,
+                    citations=[citation.model_dump() for citation in citations],
+                    usage=usage,
+                    expected_fragment_present=bool(
+                        item["expected_fragment"]
+                        and item["expected_fragment"].lower() in answer.lower()
+                    ),
+                )
+            rows.append(row)
+    positives = [row for row in rows if row["answerable"]]
+    summary = {
+        "total_questions": len(rows),
+        "answerable_questions": len(positives),
+        "unanswerable_questions": len(rows) - len(positives),
+        "hit_at_k": statistics.mean(row["hit_at_k"] for row in positives),
+        "mrr_at_k": statistics.mean(row["reciprocal_rank"] for row in positives),
+        "section_recall_at_k": statistics.mean(row["section_recall_at_k"] for row in positives),
+        "retrieval_p50_ms": percentile([row["retrieval_ms"] for row in rows], 0.5),
+        "retrieval_p95_ms": percentile([row["retrieval_ms"] for row in rows], 0.95),
+    }
+    if generate:
+        negatives = [row for row in rows if not row["answerable"]]
+        summary["answerable_fragment_match_rate"] = statistics.mean(
+            row["expected_fragment_present"] for row in positives
+        )
+        summary["unanswerable_abstention_rate"] = (
+            statistics.mean(row["insufficient_evidence"] for row in negatives)
+            if negatives
+            else None
+        )
+        summary["non_abstained_answers"] = sum(not row["insufficient_evidence"] for row in rows)
+    return {"summary": summary, "rows": rows}
 
-def generate_answer(question, retriever):
-    
-    conversation_chain = langchain.generate_prompts_chain(base_retriever=retriever)
-    result = conversation_chain.invoke({"question": question})
-    response_content = result['response'].content
-    context_list = [document.page_content.strip() for document in result['context']]
-    return response_content, context_list
-
-def evaluate_answer(question, generated_answer, context_list, expected_answer):
-    single_item_dataset = Dataset.from_dict({
-        "question": [question],
-        "answer": [generated_answer],
-        "contexts": [context_list],
-        "ground_truth": [expected_answer]
-    })
-
-    metrics = [answer_relevancy, faithfulness, context_recall, context_precision, answer_similarity, answer_correctness]
-    single_result = evaluate(single_item_dataset, metrics=metrics)
-
-    return single_result
 
 def main():
-    qa_pairs = load_qa_pairs('backend/data/qa_pairs.json')
-
-    evaluation_data = {
-        "question": [],
-        "answer": [],
-        "contexts": [],
-        "ground_truth": [],
-        "answer_relevancy": [],
-        "faithfulness": [],
-        "context_recall": [],
-        "context_precision": [],
-        "answer_similarity": [],
-        "answer_correctness": []
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=["demo", "openai"], default="demo")
+    parser.add_argument("--strategy", choices=["lexical", "dense", "hybrid"], default="lexical")
+    parser.add_argument(
+        "--generate", action="store_true", help="Also generate answers (paid in openai mode)"
+    )
+    parser.add_argument(
+        "--rerank", action="store_true", help="Use optional cross-encoder; downloads a model"
+    )
+    parser.add_argument("--output", type=Path, default=ROOT / "reports/evaluation.json")
+    args = parser.parse_args()
+    if args.mode == "demo" and args.strategy == "dense":
+        parser.error("Dense retrieval requires --mode openai")
+    base = Settings.from_env()
+    settings = replace(base, mode=args.mode, reranker="cross-encoder" if args.rerank else "none")
+    data = ROOT / "benchmarks/synthetic-qa.json"
+    raw = data.read_bytes()
+    result = run(settings, json.loads(raw), args.strategy, args.generate)
+    result["run"] = {
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "python": platform.python_version(),
+        "mode": args.mode,
+        "strategy": args.strategy,
+        "generation": args.generate,
+        "chat_model": settings.chat_model if args.mode == "openai" else None,
+        "embedding_tag": settings.embedding_tag,
+        "reranker": settings.reranker,
+        "candidate_k": settings.candidate_k,
+        "top_k": settings.top_k,
+        "chunk_words": settings.chunk_words,
+        "overlap_words": settings.overlap_words,
+        "benchmark_sha256": hashlib.sha256(raw).hexdigest(),
     }
+    result["limitations"] = [
+        "Tiny synthetic fixture; not a held-out legal benchmark or proof of legal accuracy.",
+        "Relevance labels are clause sections, not manually annotated spans.",
+        "Fragment match is a regression check, not a semantic correctness metric.",
+        "Citation validation checks source IDs and quotes, not semantic entailment.",
+        "Do not compare demo extraction with LLM generation as if they were the same system.",
+        "No historic improvement percentage: original inputs and environment were unavailable.",
+    ]
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
+    print(json.dumps(result["summary"], indent=2))
 
-    for item in qa_pairs:
-        question = item['question']
-        expected_answer = item['ground_truths']
-        raw_text = process_pdf('backend/data/Raptor_ontract.pdf')
-        text_chunks = split_text(raw_text)
-        chroma_vector_store = create_vector_store(question,text_chunks)
-        retriever = MyVectorStore().get_retriever(chroma_vector_store)
-        generated_answer, context_list = generate_answer(question, retriever)
-
-        evaluation_data["question"].append(question)
-        evaluation_data["answer"].append(generated_answer)
-        evaluation_data["contexts"].append(context_list)
-        evaluation_data["ground_truth"].append(expected_answer)
-
-        single_result = evaluate_answer(question, generated_answer, context_list, expected_answer)
-        
-        evaluation_data["answer_relevancy"].append(single_result['answer_relevancy'])
-        evaluation_data["faithfulness"].append(single_result['faithfulness'])
-        evaluation_data["context_recall"].append(single_result['context_recall'])
-        evaluation_data["context_precision"].append(single_result['context_precision'])
-        evaluation_data["answer_similarity"].append(single_result['answer_similarity'])
-        evaluation_data["answer_correctness"].append(single_result['answer_correctness'])
-
-    # Find the maximum length of all lists
-    max_length = max(len(lst) for lst in evaluation_data.values())
-    
-    # Pad all lists to the maximum length
-    for key in evaluation_data:
-        evaluation_data[key].extend([''] * (max_length - len(evaluation_data[key])))
-
-    df = pd.DataFrame(evaluation_data)
-    df.to_csv('evaluation_results.csv', index=False)
-    print(df)
 
 if __name__ == "__main__":
     main()

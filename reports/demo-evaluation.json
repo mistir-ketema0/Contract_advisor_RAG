@@ -1,0 +1,620 @@
+{
+  "summary": {
+    "total_questions": 20,
+    "answerable_questions": 16,
+    "unanswerable_questions": 4,
+    "hit_at_k": 0.875,
+    "mrr_at_k": 0.8020833333333334,
+    "section_recall_at_k": 0.875,
+    "retrieval_p50_ms": 0.57,
+    "retrieval_p95_ms": 0.818,
+    "answerable_fragment_match_rate": 0.6875,
+    "unanswerable_abstention_rate": 0.5,
+    "non_abstained_answers": 17
+  },
+  "rows": [
+    {
+      "id": "q01",
+      "question": "What is the termination notice period?",
+      "answerable": true,
+      "expected_sections": [
+        "5. Termination"
+      ],
+      "retrieved_sections": [
+        "5. Termination",
+        "6. Confidentiality"
+      ],
+      "retrieval_ms": 0.8,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:5",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "5. Termination",
+          "quote": "Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q02",
+      "question": "When must invoices be paid?",
+      "answerable": true,
+      "expected_sections": [
+        "4. Fees and Payment"
+      ],
+      "retrieved_sections": [
+        "8. Liability",
+        "6. Confidentiality",
+        "4. Fees and Payment",
+        "7. Data Protection"
+      ],
+      "retrieval_ms": 0.619,
+      "hit_at_k": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "section_recall_at_k": 1.0,
+      "answer": "Aggregate liability is capped at the fees paid during the preceding twelve months. The cap does not apply to fraud or deliberate misconduct. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:8",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "8. Liability",
+          "quote": "Aggregate liability is capped at the fees paid during the preceding twelve months. The cap does not apply to fraud or deliberate misconduct."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q03",
+      "question": "What is the monthly fee?",
+      "answerable": true,
+      "expected_sections": [
+        "4. Fees and Payment"
+      ],
+      "retrieved_sections": [
+        "4. Fees and Payment",
+        "3. Services",
+        "8. Liability"
+      ],
+      "retrieval_ms": 0.818,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The monthly fee is EUR 2,000, excluding VAT. Invoices are payable within 30 days of receipt. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:4",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "4. Fees and Payment",
+          "quote": "The monthly fee is EUR 2,000, excluding VAT. Invoices are payable within 30 days of receipt."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q04",
+      "question": "Which law governs this agreement?",
+      "answerable": true,
+      "expected_sections": [
+        "9. Governing Law"
+      ],
+      "retrieved_sections": [
+        "9. Governing Law"
+      ],
+      "retrieval_ms": 0.823,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The agreement is governed by the laws of Italy. Disputes will be submitted to the courts of Venice. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:9",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "9. Governing Law",
+          "quote": "The agreement is governed by the laws of Italy. Disputes will be submitted to the courts of Venice."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q05",
+      "question": "Which courts handle disputes?",
+      "answerable": true,
+      "expected_sections": [
+        "9. Governing Law"
+      ],
+      "retrieved_sections": [
+        "9. Governing Law"
+      ],
+      "retrieval_ms": 0.502,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The agreement is governed by the laws of Italy. Disputes will be submitted to the courts of Venice. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:9",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "9. Governing Law",
+          "quote": "The agreement is governed by the laws of Italy. Disputes will be submitted to the courts of Venice."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q06",
+      "question": "How long is the confidentiality obligation?",
+      "answerable": true,
+      "expected_sections": [
+        "6. Confidentiality"
+      ],
+      "retrieved_sections": [
+        "6. Confidentiality"
+      ],
+      "retrieval_ms": 0.527,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "Each party must protect confidential information for three years after termination. Information already public is excluded from this obligation. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:6",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "6. Confidentiality",
+          "quote": "Each party must protect confidential information for three years after termination. Information already public is excluded from this obligation."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q07",
+      "question": "What is the data breach notification deadline?",
+      "answerable": true,
+      "expected_sections": [
+        "7. Data Protection"
+      ],
+      "retrieved_sections": [
+        "7. Data Protection",
+        "3. Services",
+        "5. Termination"
+      ],
+      "retrieval_ms": 0.579,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The Supplier may process personal data only on the Customer's documented instructions. The Supplier must notify the Customer of a personal data breach within 24 hours of discovery. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:7",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "7. Data Protection",
+          "quote": "The Supplier may process personal data only on the Customer's documented instructions. The Supplier must notify the Customer of a personal data breach within 24 hours of discovery."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q08",
+      "question": "What is the liability cap?",
+      "answerable": true,
+      "expected_sections": [
+        "8. Liability"
+      ],
+      "retrieved_sections": [
+        "8. Liability"
+      ],
+      "retrieval_ms": 0.53,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "Aggregate liability is capped at the fees paid during the preceding twelve months. The cap does not apply to fraud or deliberate misconduct. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:8",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "8. Liability",
+          "quote": "Aggregate liability is capped at the fees paid during the preceding twelve months. The cap does not apply to fraud or deliberate misconduct."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q09",
+      "question": "Who owns the final reports?",
+      "answerable": true,
+      "expected_sections": [
+        "10. Intellectual Property"
+      ],
+      "retrieved_sections": [
+        "10. Intellectual Property",
+        "3. Services"
+      ],
+      "retrieval_ms": 0.723,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The Customer owns the final reports. The Supplier retains ownership of its pre-existing tools and libraries. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:10",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "10. Intellectual Property",
+          "quote": "The Customer owns the final reports. The Supplier retains ownership of its pre-existing tools and libraries."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q10",
+      "question": "What is the material breach cure period?",
+      "answerable": true,
+      "expected_sections": [
+        "5. Termination"
+      ],
+      "retrieved_sections": [
+        "5. Termination",
+        "7. Data Protection"
+      ],
+      "retrieval_ms": 0.675,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:5",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "5. Termination",
+          "quote": "Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q11",
+      "question": "When does the agreement start?",
+      "answerable": true,
+      "expected_sections": [
+        "2. Effective Date and Term"
+      ],
+      "retrieved_sections": [
+        "2. Effective Date and Term"
+      ],
+      "retrieval_ms": 0.529,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The agreement starts on 1 January 2026 and remains effective for twelve months. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:2",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "2. Effective Date and Term",
+          "quote": "The agreement starts on 1 January 2026 and remains effective for twelve months."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q12",
+      "question": "Who is the Supplier?",
+      "answerable": true,
+      "expected_sections": [
+        "1. Parties"
+      ],
+      "retrieved_sections": [
+        "7. Data Protection",
+        "1. Parties",
+        "3. Services",
+        "10. Intellectual Property"
+      ],
+      "retrieval_ms": 0.495,
+      "hit_at_k": true,
+      "reciprocal_rank": 0.5,
+      "section_recall_at_k": 1.0,
+      "answer": "The Supplier may process personal data only on the Customer's documented instructions. The Supplier must notify the Customer of a personal data breach within 24 hours of discovery. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:7",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "7. Data Protection",
+          "quote": "The Supplier may process personal data only on the Customer's documented instructions. The Supplier must notify the Customer of a personal data breach within 24 hours of discovery."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q13",
+      "question": "What services must the Supplier provide?",
+      "answerable": true,
+      "expected_sections": [
+        "3. Services"
+      ],
+      "retrieved_sections": [
+        "3. Services",
+        "7. Data Protection",
+        "Preamble",
+        "6. Confidentiality",
+        "1. Parties"
+      ],
+      "retrieval_ms": 0.606,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The Supplier will provide monthly data quality reports and maintain the Customer's analytics dashboard. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:3",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "3. Services",
+          "quote": "The Supplier will provide monthly data quality reports and maintain the Customer's analytics dashboard."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": true
+    },
+    {
+      "id": "q14",
+      "question": "How far ahead must I say I am ending the deal?",
+      "answerable": true,
+      "expected_sections": [
+        "5. Termination"
+      ],
+      "retrieved_sections": [
+        "6. Confidentiality",
+        "7. Data Protection"
+      ],
+      "retrieval_ms": 0.561,
+      "hit_at_k": false,
+      "reciprocal_rank": 0,
+      "section_recall_at_k": 0.0,
+      "answer": "Each party must protect confidential information for three years after termination. Information already public is excluded from this obligation. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:6",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "6. Confidentiality",
+          "quote": "Each party must protect confidential information for three years after termination. Information already public is excluded from this obligation."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q15",
+      "question": "How soon do I need to settle a bill?",
+      "answerable": true,
+      "expected_sections": [
+        "4. Fees and Payment"
+      ],
+      "retrieved_sections": [],
+      "retrieval_ms": 0.447,
+      "hit_at_k": false,
+      "reciprocal_rank": 0,
+      "section_recall_at_k": 0.0,
+      "answer": "I couldn't find sufficient verified evidence in the selected contracts to answer.",
+      "insufficient_evidence": true,
+      "citations": [],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q16",
+      "question": "What law applies and who owns the reports?",
+      "answerable": true,
+      "expected_sections": [
+        "9. Governing Law",
+        "10. Intellectual Property"
+      ],
+      "retrieved_sections": [
+        "10. Intellectual Property",
+        "9. Governing Law",
+        "8. Liability",
+        "3. Services"
+      ],
+      "retrieval_ms": 0.533,
+      "hit_at_k": true,
+      "reciprocal_rank": 1.0,
+      "section_recall_at_k": 1.0,
+      "answer": "The Customer owns the final reports. The Supplier retains ownership of its pre-existing tools and libraries. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:10",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 2,
+          "section": "10. Intellectual Property",
+          "quote": "The Customer owns the final reports. The Supplier retains ownership of its pre-existing tools and libraries."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q17",
+      "question": "What is the arbitration procedure?",
+      "answerable": false,
+      "expected_sections": [],
+      "retrieved_sections": [],
+      "retrieval_ms": 0.435,
+      "hit_at_k": null,
+      "reciprocal_rank": null,
+      "section_recall_at_k": null,
+      "answer": "I couldn't find sufficient verified evidence in the selected contracts to answer.",
+      "insufficient_evidence": true,
+      "citations": [],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q18",
+      "question": "What is the annual insurance premium?",
+      "answerable": false,
+      "expected_sections": [],
+      "retrieved_sections": [],
+      "retrieval_ms": 0.484,
+      "hit_at_k": null,
+      "reciprocal_rank": null,
+      "section_recall_at_k": null,
+      "answer": "I couldn't find sufficient verified evidence in the selected contracts to answer.",
+      "insufficient_evidence": true,
+      "citations": [],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q19",
+      "question": "What is the termination notice period for a subcontractor?",
+      "answerable": false,
+      "expected_sections": [],
+      "retrieved_sections": [
+        "5. Termination",
+        "6. Confidentiality"
+      ],
+      "retrieval_ms": 0.67,
+      "hit_at_k": null,
+      "reciprocal_rank": null,
+      "section_recall_at_k": null,
+      "answer": "Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:5",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "5. Termination",
+          "quote": "Either party may terminate the agreement with 60 days of written notice. A material breach permits termination after a 15-day cure period."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": false
+    },
+    {
+      "id": "q20",
+      "question": "What late payment interest rate applies?",
+      "answerable": false,
+      "expected_sections": [],
+      "retrieved_sections": [
+        "4. Fees and Payment",
+        "8. Liability"
+      ],
+      "retrieval_ms": 0.609,
+      "hit_at_k": null,
+      "reciprocal_rank": null,
+      "section_recall_at_k": null,
+      "answer": "The monthly fee is EUR 2,000, excluding VAT. Invoices are payable within 30 days of receipt. [1]",
+      "insufficient_evidence": false,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": "89a6885d666e2aed3acfd80c:4",
+          "document_id": "89a6885d666e2aed3acfd80c",
+          "source": "sample-contract.txt",
+          "page": 1,
+          "section": "4. Fees and Payment",
+          "quote": "The monthly fee is EUR 2,000, excluding VAT. Invoices are payable within 30 days of receipt."
+        }
+      ],
+      "usage": {},
+      "expected_fragment_present": false
+    }
+  ],
+  "run": {
+    "created_at": "2026-10-14T07:57:46.122550+00:00",
+    "python": "3.12.14",
+    "mode": "demo",
+    "strategy": "lexical",
+    "generation": true,
+    "chat_model": null,
+    "embedding_tag": "none",
+    "reranker": "none",
+    "candidate_k": 20,
+    "top_k": 5,
+    "chunk_words": 220,
+    "overlap_words": 30,
+    "benchmark_sha256": "7486c390cc010d9fc1b61bd41bef19121b8c8be26e3d33392a282f66dc081c55"
+  },
+  "limitations": [
+    "Tiny synthetic fixture; not a held-out legal benchmark or proof of legal accuracy.",
+    "Relevance labels are clause sections, not manually annotated spans.",
+    "Fragment match is a regression check, not a semantic correctness metric.",
+    "Citation validation checks source IDs and quotes, not semantic entailment.",
+    "Do not compare demo extraction with LLM generation as if they were the same system.",
+    "No historic improvement percentage: original inputs and environment were unavailable."
+  ]
+}

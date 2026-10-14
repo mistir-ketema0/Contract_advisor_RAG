@@ -1,0 +1,14 @@
+SYNTHETIC SECOND AGREEMENT — DEMONSTRATION ONLY
+All terms are fictional and released under the repository's MIT license.
+
+1. Parties
+This agreement is between Example Retail and Example Consulting.
+
+2. Termination
+Either party may terminate with 7 days of written notice.
+
+3. Fees and Payment
+The monthly fee is USD 9,500. Invoices are payable within 10 days.
+
+4. Governing Law
+The agreement is governed by the laws of England. Courts in London have jurisdiction.

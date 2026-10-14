@@ -1,57 +1,81 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import os
-from dotenv import load_dotenv
-import json
-from utils.pdf_util import MyPDF
-from utils.text_splitter_util import MyTextSplitter
-from utils.vector_store_util import MyVectorStore
-from backend.utils.langchain_util import MyLangChain
+"""Run: uvicorn backend.app:create_app --factory --host 127.0.0.1 --port 8000."""
 
-load_dotenv()
+import logging
+from contextlib import asynccontextmanager
+from pathlib import Path
 
-app = Flask(__name__)
-CORS(app)
-pdf_path = 'backend/data/Raptor_ontract.pdf'
+from fastapi import FastAPI, HTTPException, Request, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-openai_api_key = os.getenv('OPENAI_API_KEY')
+from backend.config import Settings
+from backend.errors import InputError
+from backend.models import AnswerResponse, DocumentInfo, IngestResponse, QuestionRequest
+from backend.service import RAGService
 
-@app.route('/get_question', methods=['POST'])
-def get_question():
-    data = request.json
-    question = data.get('question', '')
-    langchain = MyLangChain(api_key=openai_api_key)
-    hypothetical_answer = langchain.generate_hypothetical_answer(question)
-    combined_text = f"{question}\n{hypothetical_answer}"
-
-    pdf_processor = MyPDF(pdf_path)
-    raw_text = pdf_processor.get_pdf_text()
-
-    text_splitter = MyTextSplitter(raw_text)
-    text_chunks = text_splitter.get_cosine_similarity_chunks()
-    # text_chunks = text_splitter.get_text_chunks()
+logger = logging.getLogger(__name__)
 
 
-    vector_store = MyVectorStore()
-    chroma_vector_store = vector_store.embed_text_and_return_vectorstore(text_chunks + [combined_text])
+def create_app(settings: Settings | None = None, service: RAGService | None = None):
+    settings = settings or Settings.from_env()
 
-    retriever = vector_store.get_retriever(chroma_vector_store)
-    conversation_chain = langchain.generate_prompts_chain(base_retriever=retriever)
+    @asynccontextmanager
+    async def lifespan(app):
+        app.state.rag = service or RAGService(settings)
+        yield
 
-    result = conversation_chain.invoke({
-        "question": question,
-    })
+    app = FastAPI(title="Contract Advisor RAG", version="0.2.0", lifespan=lifespan)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=list(settings.cors_origins),
+        allow_methods=["GET", "POST", "DELETE"],
+        allow_headers=["Content-Type"],
+    )
 
-    response_content = result['response'].content
+    @app.exception_handler(Exception)
+    async def provider_error(request, exc):
+        logger.error("Request failed: %s", type(exc).__name__)
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": "Request failed. Check provider configuration and server availability."
+            },
+        )
 
-    if isinstance(response_content, str):
-        response_content = response_content.strip()
+    @app.get("/health")
+    def health():
+        return {
+            "status": "ok",
+            "mode": settings.mode,
+            "version": "0.2.0",
+            "embedding_tag": settings.embedding_tag,
+        }
+
+    @app.get("/documents", response_model=list[DocumentInfo])
+    def documents(request: Request):
+        return request.app.state.rag.store.documents()
+
+    @app.post("/documents", response_model=IngestResponse)
+    def upload(request: Request, file: UploadFile):
+        raw = file.file.read(settings.max_upload_bytes + 1)
+        filename = Path((file.filename or "contract.pdf").replace("\\", "/")).name
+        if len(filename) > 200:
+            raise HTTPException(400, "Filename is too long")
         try:
-            answer = json.loads(response_content)
-        except json.JSONDecodeError as e:
-            return jsonify({'answer': response_content}), 200
+            return request.app.state.rag.ingest(filename, raw)
+        except InputError as exc:
+            raise HTTPException(400, str(exc)) from exc
 
-    return jsonify({'answer': answer}), 200
+    @app.delete("/documents/{document_id}", status_code=204)
+    def delete(document_id: str, request: Request):
+        if not request.app.state.rag.store.delete(document_id):
+            raise HTTPException(404, "Document not found")
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5001)
+    @app.post("/chat", response_model=AnswerResponse)
+    def chat(body: QuestionRequest, request: Request):
+        try:
+            return request.app.state.rag.answer(body.question, body.document_ids)
+        except InputError as exc:
+            raise HTTPException(400, str(exc)) from exc
+
+    return app
