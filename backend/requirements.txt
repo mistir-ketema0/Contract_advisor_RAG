@@ -1,12 +1,2 @@
-Flask
-PyPDF2
-langchain
-langchain-community
-langchain-openai
-chromadb
-openai
-Flask_cors
-ragas
-pyautogen
-scikit-learn
-dotenv
+# Run from the repository root. Tested exact versions: requirements.lock.
+-e .

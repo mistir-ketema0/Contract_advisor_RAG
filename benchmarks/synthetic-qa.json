@@ -1,0 +1,175 @@
+[
+  {
+    "id": "q01",
+    "question": "What is the termination notice period?",
+    "answerable": true,
+    "expected_sections": [
+      "5. Termination"
+    ],
+    "expected_fragment": "60 days"
+  },
+  {
+    "id": "q02",
+    "question": "When must invoices be paid?",
+    "answerable": true,
+    "expected_sections": [
+      "4. Fees and Payment"
+    ],
+    "expected_fragment": "30 days"
+  },
+  {
+    "id": "q03",
+    "question": "What is the monthly fee?",
+    "answerable": true,
+    "expected_sections": [
+      "4. Fees and Payment"
+    ],
+    "expected_fragment": "EUR 2,000"
+  },
+  {
+    "id": "q04",
+    "question": "Which law governs this agreement?",
+    "answerable": true,
+    "expected_sections": [
+      "9. Governing Law"
+    ],
+    "expected_fragment": "laws of Italy"
+  },
+  {
+    "id": "q05",
+    "question": "Which courts handle disputes?",
+    "answerable": true,
+    "expected_sections": [
+      "9. Governing Law"
+    ],
+    "expected_fragment": "courts of Venice"
+  },
+  {
+    "id": "q06",
+    "question": "How long is the confidentiality obligation?",
+    "answerable": true,
+    "expected_sections": [
+      "6. Confidentiality"
+    ],
+    "expected_fragment": "three years"
+  },
+  {
+    "id": "q07",
+    "question": "What is the data breach notification deadline?",
+    "answerable": true,
+    "expected_sections": [
+      "7. Data Protection"
+    ],
+    "expected_fragment": "24 hours"
+  },
+  {
+    "id": "q08",
+    "question": "What is the liability cap?",
+    "answerable": true,
+    "expected_sections": [
+      "8. Liability"
+    ],
+    "expected_fragment": "preceding twelve months"
+  },
+  {
+    "id": "q09",
+    "question": "Who owns the final reports?",
+    "answerable": true,
+    "expected_sections": [
+      "10. Intellectual Property"
+    ],
+    "expected_fragment": "Customer owns"
+  },
+  {
+    "id": "q10",
+    "question": "What is the material breach cure period?",
+    "answerable": true,
+    "expected_sections": [
+      "5. Termination"
+    ],
+    "expected_fragment": "15-day"
+  },
+  {
+    "id": "q11",
+    "question": "When does the agreement start?",
+    "answerable": true,
+    "expected_sections": [
+      "2. Effective Date and Term"
+    ],
+    "expected_fragment": "1 January 2026"
+  },
+  {
+    "id": "q12",
+    "question": "Who is the Supplier?",
+    "answerable": true,
+    "expected_sections": [
+      "1. Parties"
+    ],
+    "expected_fragment": "Harbor Analytics"
+  },
+  {
+    "id": "q13",
+    "question": "What services must the Supplier provide?",
+    "answerable": true,
+    "expected_sections": [
+      "3. Services"
+    ],
+    "expected_fragment": "monthly data quality reports"
+  },
+  {
+    "id": "q14",
+    "question": "How far ahead must I say I am ending the deal?",
+    "answerable": true,
+    "expected_sections": [
+      "5. Termination"
+    ],
+    "expected_fragment": "60 days"
+  },
+  {
+    "id": "q15",
+    "question": "How soon do I need to settle a bill?",
+    "answerable": true,
+    "expected_sections": [
+      "4. Fees and Payment"
+    ],
+    "expected_fragment": "30 days"
+  },
+  {
+    "id": "q16",
+    "question": "What law applies and who owns the reports?",
+    "answerable": true,
+    "expected_sections": [
+      "9. Governing Law",
+      "10. Intellectual Property"
+    ],
+    "expected_fragment": "laws of Italy"
+  },
+  {
+    "id": "q17",
+    "question": "What is the arbitration procedure?",
+    "answerable": false,
+    "expected_sections": [],
+    "expected_fragment": ""
+  },
+  {
+    "id": "q18",
+    "question": "What is the annual insurance premium?",
+    "answerable": false,
+    "expected_sections": [],
+    "expected_fragment": ""
+  },
+  {
+    "id": "q19",
+    "question": "What is the termination notice period for a subcontractor?",
+    "answerable": false,
+    "expected_sections": [],
+    "expected_fragment": ""
+  },
+  {
+    "id": "q20",
+    "question": "What late payment interest rate applies?",
+    "answerable": false,
+    "expected_sections": [],
+    "expected_fragment": ""
+  }
+]

@@ -1,0 +1,1 @@
+"""Contract Advisor RAG backend."""
